@@ -6,13 +6,13 @@ provider "aws" {
 
 # Definieren der anzulegenden Ressourcen
 
-# Erstellen einer virtuellen Maschiene.
+# Erstellen einer virtuellen Maschine.
 resource "aws_instance" "server" {
   ami           = "ami-043097594a7df80ec" # Snapshot
   instance_type = "t3.micro"
 }
 
-# Ausgewählte infromationen der erstellten ressourcen zurückgeben
+# Ausgewählte infromationen der erstellten Ressourcen zurückgeben
 output "id" {
   description = "ID"
   value       = aws_instance.server.id

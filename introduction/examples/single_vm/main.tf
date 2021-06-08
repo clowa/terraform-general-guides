@@ -17,7 +17,7 @@ resource "aws_subnet" "subnet" {
   availability_zone = "eu-central-1a"
 }
 
-# Erstellen einer virtuellen Maschiene.
+# Erstellen einer virtuellen Maschine.
 resource "aws_instance" "server" {
   ami           = "ami-043097594a7df80ec" # Snapshot
   instance_type = "t3.micro"

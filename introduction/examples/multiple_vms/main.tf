@@ -4,7 +4,7 @@ provider "aws" {
   profile = "default"
 }
 
-# Locale variablen
+# Lokale variablen
 locals {
   # Anzahl der zu erstellenden VMs
   number_vms = 2
@@ -23,7 +23,7 @@ resource "aws_subnet" "subnet" {
   availability_zone = "eu-central-1a"
 }
 
-# Erstellen mehrerer virtuellen Maschiene.
+# Erstellen mehrerer virtuellen Maschine.
 resource "aws_instance" "server" {
   count         = local.number_vms
   ami           = "ami-043097594a7df80ec" # Snapshot
