@@ -1,7 +1,7 @@
 # Verwendete versionen der Abhängigkeiten
 
 terraform {
-  required_version = ">= 0.13, < 0.16"
+  required_version = ">= 0.13"
 
   required_providers {
     aws = {
