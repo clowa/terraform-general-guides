@@ -7,20 +7,27 @@ backgroundColor: #fff
 backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 ---
 
+<style>
+img[alt~="center"] {
+  display: block;
+  margin: 0 auto;
+}
+</style>
+
 # Infrastructure as Code
 
 ---
 
 # Was ist Infrastructure as Code
 
-- Infrastructure as Code - kurz: IaC
-- Definieren von Ressourcen / Abläufen / Abhängigkeiten als "Code"
+**"[...] Infrastructure-as-Code (IaC) ist die Verwaltung von Infrastruktur (Netzwerken, virtuellen Computern, Lastenausgleichsmodulen und der Verbindungstopologie) in einem beschreibenden Modell. [...]"**
+[Quelle](https://docs.microsoft.com/de-de/devops/deliver/what-is-infrastructure-as-code)
 
 ---
 
-# Was für IaC gibt es?
+# Was für Arten gibt es?
 
-- Prozedural Sprache - Wie erreiche ich den Zielzustand
+- Prozedurale Sprache - Wie erreiche ich den Zielzustand
 - Deklarative Sprache - Was ist der Zielzustand
 
 ## Deklarativ vs. prozedural
@@ -33,13 +40,19 @@ backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 
 ---
 
+# IaC Bereiche
+
+![w:800 center](./images/IaC_Tool_Bereiche.png)
+
+---
+
 # Vor- & Nachteile von deklarativem IaC
 
 | Vorteile                                                                            | Nachteile                                                        |
 | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Transparente Infrastruktur</br> => Risikovermeidung                                 | Hoher Aufwand bei Konzeption & Umsetzung                         |
-| Wiederholbar / Skalierbar                                                           | Know how über Cloudprovider APIs                                 |
-| Automatisierung der Infrastruktur                                                   | Manuelle Konfigurationseingriffe<br />können alles kaputt machen |
+| Transparente Infrastruktur</br> => Risikovermeidung                                 | Manuelle Konfigurationseingriffe<br />können alles kaputt machen |
+| Wiederholbar / Skalierbar                                                           | Hoher Aufwand bei Konzeption & Umsetzung                         |
+| Automatisierung der Infrastruktur                                                   | Know how über Cloudprovider APIs                                 |
 | Vorteile von Softwareentwicklung</br>(Testbar, Versionierbar, Deployment Pipelines) |                                                                  |
 
 ---
@@ -49,6 +62,7 @@ backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 - AWS Cloud Formation
 - Azure Resource Manager
 - Google Cloud Deployment Manager
+- Pulumi
 - Terraform
 - ...
 
@@ -57,10 +71,19 @@ backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 # Was ist Terraform
 
 - Entwickelt von der Firma HashiCorp
-- Released im Juli 2014
+- Released im Juli 2014 - 1.0 Release am 08.06.2021
 - Deklarativer IaC
 - Plattform unabhängig (Azure, AWS, vSphere)
 - Unterstützt Hybrid Cloud Infrastruktur
+
+---
+
+# Funktionen von Terraform
+
+- Integration von Plattformen über Provider
+- Abhängigkeitsgraph
+- Ausführungplan
+- Inkrementelle Veränderungen
 
 ---
 
@@ -72,7 +95,6 @@ provider "aws" {
   region  = "eu-central-1"
   profile = "default"
 }
-
 ```
 
 ---
@@ -156,6 +178,12 @@ locals {
   number_vms = 2                                            # Anzahl der zu erstellenden VMs
 }
 
+# Erstellen mehrerer Netzwerkinterfaces für jede VM in dem virtuellen Subnetz.
+resource "aws_network_interface" "nic" {
+  count     = local.number_vms
+  subnet_id = "subnet-01e96318745f57bb9"
+}
+
 # Erstellen mehrerer virtuellen Maschine.
 resource "aws_instance" "server" {
   count         = local.number_vms                          # Block X mal wiederholen
@@ -167,12 +195,6 @@ resource "aws_instance" "server" {
     network_interface_id = aws_network_interface.nic[count.index].id
     device_index         = 0
   }
-}
-
-# Erstellen mehrerer Netzwerkinterfaces für jede VM in dem erstellten virtuellen Subnetz.
-resource "aws_network_interface" "nic" {
-  count     = local.number_vms
-  subnet_id = "subnet-01e96318745f57bb9"
 }
 ```
 
@@ -192,9 +214,9 @@ resource "aws_network_interface" "nic" {
 ```
 # Input variablen zur Anpassung der Ressourcen
 variable "instanz_typ" {
-  type = string
+  type        = string
   description = "(Optional) Größe der Instanz."
-  default = "t3.micro"
+  default     = "t3.micro"
 }
 
 # Erstellen einer virtuellen Maschine.
@@ -222,6 +244,8 @@ output "private_ipv4" {
 ```
 module "vm" {
   source      = "<Weg zum Modul>" # Als quelle können auch repositories und registries verwendet werden.
+
+  # Variablen des Moduls anpassen.
   instanz_typ = "t2.nano"
 }
 
@@ -234,3 +258,17 @@ output "vm_id" {
 ```
 
 ---
+
+# Ende
+
+### Fragen ? -> Fragen !!
+
+### Zeit für einen Austausch.
+
+---
+
+# Quellen
+
+- https://docs.microsoft.com/de-de/devops/deliver/what-is-infrastructure-as-code
+- https://www.computerweekly.com/de/ratgeber/Infrastructure-as-Code-Acht-beliebte-Tools-im-Vergleich
+- https://www.redhat.com/de/topics/automation/what-is-infrastructure-as-code-iac
