@@ -51,7 +51,7 @@ img[alt~="center"] {
 | Vorteile                                                                            | Nachteile                                                        |
 | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | Transparente Infrastruktur</br> => Risikovermeidung                                 | Manuelle Konfigurationseingriffe<br />können alles kaputt machen |
-| Wiederholbar / Skalierbar                                                           | Hoher Aufwand bei Konzeption & Umsetzung                         |
+| Wiederholbar                                                                        | Hoher Aufwand bei Konzeption & Umsetzung                         |
 | Automatisierung der Infrastruktur                                                   | Know how über Cloudprovider APIs                                 |
 | Vorteile von Softwareentwicklung</br>(Testbar, Versionierbar, Deployment Pipelines) |                                                                  |
 
@@ -75,6 +75,9 @@ img[alt~="center"] {
 - Deklarativer IaC
 - Plattform unabhängig (Azure, AWS, vSphere)
 - Unterstützt Hybrid Cloud Infrastruktur
+- Unveränderbare Infrastruktur
+- kein Agent
+- kein Master Server
 
 ---
 
