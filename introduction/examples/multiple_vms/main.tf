@@ -8,6 +8,10 @@ provider "aws" {
 locals {
   # Anzahl der zu erstellenden VMs
   number_vms = 2
+  tags = {
+    created-by = "terraform"
+    owned-by   = "cahlers"
+  }
 }
 
 # Definieren der anzulegenden Ressourcen
@@ -15,12 +19,14 @@ locals {
 # Anlegen eines virtuellen Netzwerkes in AWS.
 resource "aws_vpc" "network" {
   cidr_block = "172.16.0.0/16"
+  tags       = local.tags
 }
 
 resource "aws_subnet" "subnet" {
   vpc_id            = aws_vpc.network.id # Verweis auf erstelltes Netzwerk
   cidr_block        = "172.16.1.0/24"
   availability_zone = "eu-central-1a"
+  tags              = local.tags
 }
 
 # Erstellen mehrerer virtuellen Maschine.
@@ -28,6 +34,7 @@ resource "aws_instance" "server" {
   count         = local.number_vms
   ami           = "ami-043097594a7df80ec" # Snapshot
   instance_type = "t3.micro"
+  tags          = local.tags
 
   network_interface {
     network_interface_id = aws_network_interface.nic[count.index].id # Verweis auf erstellte  Netzwerkinterfaces
@@ -39,6 +46,7 @@ resource "aws_instance" "server" {
 resource "aws_network_interface" "nic" {
   count     = local.number_vms
   subnet_id = aws_subnet.subnet.id # Verweis auf erstelltes Subnetz
+  tags      = local.tags
 }
 
 # Ausgewählte infromationen der erstellten ressourcen zurückgeben
