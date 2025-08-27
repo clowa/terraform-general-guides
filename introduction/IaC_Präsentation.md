@@ -1,17 +1,22 @@
 ---
 marp: true
 theme: default
-_class: lead
+# class: invert
 paginate: true
 backgroundColor: #fff
 backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 ---
 
 <style>
-img[alt~="center"] {
-  display: block;
-  margin: 0 auto;
-}
+  img[alt~="center"] {
+    display: block;
+    margin: 0 auto;
+  }
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
 </style>
 
 # Infrastructure as Code
@@ -90,20 +95,127 @@ img[alt~="center"] {
 
 ---
 
-# Praktische Beispiele
+# Terraform Code
+
+<div class="columns">
+<div>
+
+- HashiCorp Configuration Language (HCL)
+- Domain Specific Language (DSL) für mehrere Produkte von HashiCorp
+- Dateiendungen von Terraform: `.tf`, `.tfvars`, `.tfbackend`
+
+</div>
+<div>
+
+Definition in Blöcken, z.B.:
+
+```hcl
+terraform {}
+provider {}
+resource {}
+data {}
+locals {}
+variable {}
+output {}
+```
+
+</div>
+</div>
+
+---
+
+# Terraform Registry
+
+<div class="columns">
+<div>
+
+- Provider zur Anbindung an Cloud Provider
+- Module zur Wiederverwendung von Code
+- Für offizelle und Community Entwicklungen
+- <https://registry.terraform.io>
+
+</div>
+<div>
+
+![](./images/Terraform_Registry.jpg)
+
+</div>
+</div>
+
+---
+
+# Terraform State
+
+<div class="columns">
+<div>
+
+- Speichert den aktuellen Zustand der Infrastruktur
+- Standardmäßig lokal in der Datei `terraform.tfstate`
+- Kann in einem Remote Backend gespeichert werden
+- Locking des States bei Remote Backends
+- Kann sensible Daten enthalten (z.B. Passwörter)
+
+</div>
+<div>
+
+![w:450](./images/Terraform_State_Flow.jpg)
+
+</div>
+</div>
+
+---
+
+# Variables & Locals
+
+<div class="columns">
+<div>
+
+#### Variables
+
+- Typisierung möglich: `string`, `number`, `bool`, `list`, `map`, _etc._
+- Standardwerte & Validierung möglich
+- Können bei Modulen übergeben werden
+
+```hcl
+variable "example"{
+  type        = string
+  description = "An example variable"
+  default     = "foo"
+}
+```
+
+</div>
+<div>
+
+#### Locals
+
+- Lokale Variablen, nur im aktuellen Modul
+- Können nicht von außen gesetzt werden
+- Keine Typisierung, Validierung oder Standardwerte
+
+```hcl
+locals {
+  example = "foo"
+}
+```
+
+</div>
+</div>
+
+---
+
+# Code Beispiele
 
 ---
 
 # Ende
 
-### Fragen ? -> Fragen !!
-
-### Zeit für einen Austausch.
+### Fragen ? -> Fragen
 
 ---
 
 # Quellen
 
-- https://docs.microsoft.com/de-de/devops/deliver/what-is-infrastructure-as-code
-- https://www.computerweekly.com/de/ratgeber/Infrastructure-as-Code-Acht-beliebte-Tools-im-Vergleich
-- https://www.redhat.com/de/topics/automation/what-is-infrastructure-as-code-iac
+- <https://docs.microsoft.com/de-de/devops/deliver/what-is-infrastructure-as-code>
+- <https://www.computerweekly.com/de/ratgeber/Infrastructure-as-Code-Acht-beliebte-Tools-im-Vergleich>
+- <https://www.redhat.com/de/topics/automation/what-is-infrastructure-as-code-iac>
