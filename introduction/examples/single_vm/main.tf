@@ -1,7 +1,6 @@
 # Einrichten des AWS Cloud providers 
 provider "aws" {
-  region  = "eu-central-1"
-  profile = "default"
+  region = "eu-central-1"
 }
 
 # Definieren der anzulegenden Ressourcen
@@ -17,21 +16,20 @@ resource "aws_subnet" "subnet" {
   availability_zone = "eu-central-1a"
 }
 
+# Erstellen eines Netzwerkinterfaces für die VM in dem erstellten virtuellen Subnetz.
+resource "aws_network_interface" "nic" {
+  subnet_id   = aws_subnet.subnet.id # Verweis auf erstelltes Subnetz
+  private_ips = ["172.16.1.100"]
+}
+
 # Erstellen einer virtuellen Maschine.
 resource "aws_instance" "server" {
   ami           = "ami-043097594a7df80ec" # Snapshot
   instance_type = "t3.micro"
 
-  network_interface {
+  primary_network_interface {
     network_interface_id = aws_network_interface.nic.id # Verweis auf erstellte  Netzwerkinterface
-    device_index         = 0
   }
-}
-
-# Erstellen eines Netzwerkinterfaces für die VM in dem erstellten virtuellen Subnetz.
-resource "aws_network_interface" "nic" {
-  subnet_id   = aws_subnet.subnet.id # Verweis auf erstelltes Subnetz
-  private_ips = ["172.16.1.100"]
 }
 
 # Ausgewählte infromationen der erstellten ressourcen zurückgeben

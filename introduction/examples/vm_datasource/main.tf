@@ -1,7 +1,6 @@
 # Einrichten des AWS Cloud providers 
 provider "aws" {
-  region  = "eu-central-1"
-  profile = "default"
+  region = "eu-central-1"
 }
 
 # Abrufen von Daten von AWS
@@ -12,8 +11,11 @@ data "aws_vpc" "network" {
 }
 
 # Abrufen der Subnetze des virtullen Netzwerkes
-data "aws_subnet_ids" "subnets" {
-  vpc_id = data.aws_vpc.network.id
+data "aws_subnets" "subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.network.id]
+  }
 }
 
 # Definieren der anzulegenden Ressourcen
@@ -23,15 +25,14 @@ resource "aws_instance" "server" {
   ami           = "ami-043097594a7df80ec" # Snapshot
   instance_type = "t3.micro"
 
-  network_interface {
+  primary_network_interface {
     network_interface_id = aws_network_interface.nic.id # Verweis auf erstellte  Netzwerkinterface
-    device_index         = 0
   }
 }
 
 # Erstellen eines Netzwerkinterfaces für die VM in dem ersten abgerufenen virtuellen Subnetz.
 resource "aws_network_interface" "nic" {
-  subnet_id = sort(data.aws_subnet_ids.subnets.ids)[0] # Verweis auf das erste abgerufenden Subnetz
+  subnet_id = sort(data.aws_subnets.subnets.ids)[0] # Verweis auf das erste abgerufenden Subnetz
 }
 
 # Ausgewählte infromationen der erstellten ressourcen zurückgeben
@@ -42,7 +43,7 @@ output "vpc_id" {
 
 output "subnet_ids" {
   description = "IDs der abgerufenen Subnetze des virutellen Netzwerkes"
-  value       = data.aws_subnet_ids.subnets.id
+  value       = data.aws_subnets.subnets.id
 }
 
 output "vm_id" {

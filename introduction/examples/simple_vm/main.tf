@@ -1,7 +1,6 @@
 # Einrichten des AWS Cloud providers 
 provider "aws" {
-  region  = "eu-central-1"
-  profile = "default"
+  region = "eu-central-1"
 }
 
 # Definieren der anzulegenden Ressourcen

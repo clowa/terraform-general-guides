@@ -4,13 +4,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.42 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.42 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 3.42 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.42 |
 
 ## Modules
 
@@ -21,12 +21,15 @@ No modules.
 | Name | Type |
 |------|------|
 | [aws_instance.server](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance) | resource |
+| [aws_network_interface.nic](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/network_interface) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_instanz_typ"></a> [instanz\_typ](#input\_instanz\_typ) | (Optional) Größe der Instanz. | `string` | `"t3.micro"` | no |
+| <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | ID des Subnetzes in dem die Instanz erstellt werden soll. | `string` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | (Optional) Tags der Instanz. | `map(string)` | `{}` | no |
 
 ## Outputs
 
