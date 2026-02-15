@@ -1,5 +1,14 @@
 {
     "markdown.marp.themes": [
         "theme.css"
+    ],
+    "cSpell.words": [
+        "goss",
+        "Jmeter",
+        "Papertrail",
+        "serverspec",
+        "Terratest",
+        "tfint",
+        "tfstate"
     ]
 }
