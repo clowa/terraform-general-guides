@@ -1,25 +1,24 @@
 ---
 marp: true
-theme: default
-# class: invert
+theme: teqwerk
 paginate: true
 backgroundColor: #fff
-backgroundImage: url('https://marp.app/assets/hero-background.jpg')
+footer: Infrastructure as Code
 ---
 
-<style>
-  img[alt~="center"] {
-    display: block;
-    margin: 0 auto;
-  }
-  .columns {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-  }
-</style>
+<!--
+_class: title
+-->
 
-# Infrastructure as Code
+<div class="columns title-grid">
+  <div>
+    <h1>Infrastructure as Code</h1>
+    <h2>Terraform & IaC</h2>
+  </div>
+  <div>
+    <img src="./images/corporate/brand.png" />
+  </div>
+</div>
 
 ---
 
@@ -62,6 +61,16 @@ backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 
 ---
 
+# Warum nutzen wir IaC?
+
+- **Reproduzierbarkeit**: Umgebungen sind jederzeit neu erzeugbar (Dev/Test/Prod werden vergleichbarer)
+- **Geschwindigkeit & Skalierung**: Provisioning und Änderungen laufen automatisiert und wiederholbar
+- **Weniger Fehler**: weniger Klickpfade, weniger "vergessene" Einstellungen
+- **Nachvollziehbarkeit**: Änderungen über Git/PRs (Review, Audit-Trail, Rollback)
+- **Software-Prinzipien**: Tests, CI/CD, Security-Scans und Policy-as-Code sind möglich
+
+---
+
 # Was gibt es für deklarative IaC Programme?
 
 - AWS Cloud Formation
@@ -92,6 +101,28 @@ backgroundImage: url('https://marp.app/assets/hero-background.jpg')
 - Abhängigkeitsgraph
 - Ausführungplan
 - Inkrementelle Veränderungen
+
+---
+
+# Warum nur via IaC ändern? (Config Drift)
+
+**Config Drift** = Ist-Zustand weicht vom Code ab (z.B. Änderung im Portal/CLI/Hotfix).
+
+- `terraform plan` zeigt plötzlich unerwartete Diffs
+- Änderungen werden schwer reproduzierbar ("Snowflake"-Umgebungen)
+- Debugging wird langsam: "Was ist wirklich live?"
+- Risiko für Security/Compliance, weil Änderungen außerhalb von Reviews passieren
+
+**Prinzip:** "Ändere die Quelle (Git), nicht das Ziel (Portal)."
+
+---
+
+# Drift verhindern & erkennen
+
+- **Verhindern**: Schreibrechte im Portal einschränken, Änderungen über Pipeline/PR erzwingen
+- **Notfälle**: Break-glass nur temporär (z.B. PIM/JIT), danach Change in IaC nachziehen
+- **Erkennen**: PR-Checks mit `terraform plan`, regelmäßige Drift-Checks (scheduled)
+- **Beheben**: Drift bewusst in Code übernehmen *oder* per IaC wieder auf Soll-Zustand zurückführen
 
 ---
 
@@ -172,7 +203,7 @@ output {}
 
 #### Variables
 
-- Typisierung möglich: `string`, `number`, `bool`, `list`, `map`, _etc._
+- Typisierung möglich: `string`, `number`, `bool`, `list`, `map`, *etc.*
 - Standardwerte & Validierung möglich
 - Können bei Modulen übergeben werden
 
@@ -217,5 +248,7 @@ locals {
 # Quellen
 
 - <https://docs.microsoft.com/de-de/devops/deliver/what-is-infrastructure-as-code>
+- <https://learn.microsoft.com/devops/deliver/what-is-infrastructure-as-code>
+- <https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/infrastructure-as-code-updates>
 - <https://www.computerweekly.com/de/ratgeber/Infrastructure-as-Code-Acht-beliebte-Tools-im-Vergleich>
 - <https://www.redhat.com/de/topics/automation/what-is-infrastructure-as-code-iac>
