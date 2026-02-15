@@ -1,0 +1,54 @@
+name: Render Marp PDFs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.marp.md"
+  workflow_dispatch:
+
+jobs:
+  render-marp:
+    runs-on: ubuntu-latest
+    container:
+      image: marpteam/marp-cli:latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Install git
+        run: |
+          set -euo pipefail
+          if ! command -v git >/dev/null 2>&1; then
+            apt-get -qqq update
+            apt-get -yqq install git
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Render Marp PDFs
+        run: |
+          set -euo pipefail
+          mapfile -d '' files < <(find . -type f -name '*.marp.md' -print0)
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No .marp.md files found."
+            exit 0
+          fi
+
+          for file in "${files[@]}"; do
+            rel="${file#./}"
+            out="${rel%.marp.md}.pdf"
+            echo "Rendering ${rel} -> ${out}"
+            /home/marp/.cli/marp-cli.js --pdf --allow-local-files --theme-set theme.css -o "${out}" -- "${rel}"
+          done
+
+      - name: Upload PDFs
+        if: ${{ env.ACT != 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: presentations-pdf
+          path: |
+            **/*.pdf
