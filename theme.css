@@ -117,6 +117,12 @@ section h3 {
     gap: 1rem;
 }
 
+.columns-text-and-image {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 1rem;
+}
+
 .title-grid {
     grid-template-columns: 1.2fr 0.8fr;
     align-items: center;
@@ -182,4 +188,9 @@ section pre {
 img[alt~="center"] {
     display: block;
     margin: 0 auto;
+}
+
+img[alt~="align-right"] {
+    float: right;
+    margin-left: 1rem;
 }

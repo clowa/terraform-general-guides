@@ -1,0 +1,27 @@
+version: "3"
+
+tasks:
+  ############################################################
+  # Marp
+  marp-devserver:
+    desc: "Start Marp development server (detached)"
+    cmds:
+      - |
+        # Run in the background so it doesn't block the shell.
+        # Avoid allocating a TTY (-t) so this also works in non-interactive environments.
+        docker rm -f marp-devserver >/dev/null 2>&1 || true
+
+        docker run --rm -d --name marp-devserver \
+          -v "$(pwd)":/workspace \
+          -w /workspace \
+          -p 8080:8080 \
+          ghcr.io/marp-team/marp-cli \
+            --allow-local-files --theme-set theme.css --watch --server . {{.CLI_ARGS}}
+
+        echo "Marp devserver running: http://localhost:8080"
+        echo "Stop with: task marp-devserver-stop"
+
+  marp-devserver-stop:
+    desc: "Stop Marp development server"
+    cmds:
+      - docker stop marp-devserver >/dev/null 2>&1 || true
